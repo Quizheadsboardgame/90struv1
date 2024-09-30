@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE 90S</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="George Michael Logo">
+    <h1>THE 90S</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "Which '90s girl group is the best selling girl group of all time?", answer: "Spice Girls" },
+        { question: "Which '90s boy band is the best selling boy band of all time?", answer: "The Backstreet Boys" },
+        { question: "Who was the President of the United States for the majority of the '90s?", answer: "Bill Clinton" },
+        { question: "What 1993 all-Black sitcom was the direct 'inspiration' for the 1994 TV show Friends?", answer: "Living Single" },
+        { question: "Which legendary artists wrote and performed the song 'I Will Always Love You' from the 1992 film The Bodyguard?", answer: "Written by Dolly Parton and performed by Whitney Houston" },
+        { question: "What was the name of the fictional town that Dawson’s Creek was set in?", answer: "Capeside" },
+        { question: "What year was the World Wide Web (WWW) first introduced to the public?", answer: "1991" },
+        { question: "Which star athlete's trial verdict did 57% of Americans tune in to watch in October 1995?", answer: "OJ Simpson" },
+        { question: "Which 1999 film's main cast was stacked with teen icons such as Sarah Michelle Gellar, Reese Witherspoon, and Ryan Phillippe?", answer: "Cruel Intentions" },
+        { question: "What's the name of the colorful, egg-shaped, keychain Japanese children's toy that left kids responsible for a digital pet?", answer: "Tamagotchi" },
+        { question: "What gripe do audiences famously have with the 1997 film Titanic?", answer: "Rose not making enough room on the door/wood paneling for both her and Jack after the boat sinks." },
+        { question: "What three groundbreaking pillars in music, fashion, and philanthropy tragically passed away within five months of each other between March and August 1997?", answer: "Biggie (Notorious B.I.G), Gianni Versace, and Princess Diana" },
+        { question: "Which Disney animated movie became the first in history to be nominated for Best Picture at the Oscars?", answer: "Beauty and the Beast" },
+        { question: "What was the federal minimum wage in 1990?", answer: "$3.80" },
+        { question: "Which child star became the first ever to be paid a million dollars for their movie role?", answer: "Macaulay Culkin for his role in the movie My Girl" },
+        { question: "What popular '90s kid and teen accessory was invented by a high school shop teacher in Wisconsin?", answer: "Slap Bracelets" },
+        { question: "What popular 1992 reality TV show took you into the lives of seven strangers who stopped being polite and started getting real?", answer: "The Real World" },
+        { question: "Which legendary artist shattered her own attendance record at the now-abandoned Houston Astrodome in 1995?", answer: "Selena Quintanilla-Pérez" },
+        { question: "What was the best selling video game console of the '90s?", answer: "Sony Playstation" },
+        { question: "What year did Google make its debut?", answer: "1998" },
+        { question: "How old was Tiger Woods when he won his first Masters in 1997?", answer: "21" },
+        { question: "What's the name of the infamous narco and Medellin Cartel leader who was gunned down by police in 1993?", answer: "Pablo Escobar" },
+        { question: "What show premiered in 1998 and took us on the journey of four best friends exploring (and chronicling) Manhattan's dating scene?", answer: "Sex and the City" },
+        { question: "After the breakup of Nirvana in 1994, what band did Dave Grohl go on to create?", answer: "Foo Fighters" },
+        { question: "What 1994 sitcom included real-life identical twins Tia and Tamera Mowry?", answer: "Sister, Sister" },
+        { question: "In 1997, David Wolf became the first American to vote from where?", answer: "Space. A Texas state law allowed him to do so." },
+        { question: "Brian Mulroney, Kim Campbell, and Jean Chrétien each served during some part of the 1990s as Prime Minister of what country?", answer: "Canada" },
+        { question: "In 1990, which iconic supermodel told Vogue magazine, 'We don't wake up for less than $10,000 a day.'?", answer: "Linda Evangelista" },
+        { question: "Invented in 1994 by Japanese corporation Denso Wave, what does the 'QR' in QR Code stand for?", answer: "Quick response" },
+        { question: "What 1990 World Cup champion is the only nation to win a World Cup and no longer exists (in the same way)?", answer: "West Germany" },
+        { question: "What's the name of the popular martini variation that was created in 1996 at a West Hollywood restaurant named Lola's?", answer: "Appletini or Apple Martini" },
+        { question: "What 1995 drama that bombed in the box office but became a cult classic starred Saved By The Bell star Elizabeth Berkley?", answer: "Showgirls" },
+        { question: "What 1999 found-footage horror movie redefined the horror movie genre and actually left audiences believing it was a true story?", answer: "The Blair Witch Project" },
+        { question: "What 1999 Emmy-winning TV show followed a New Jersey mob boss and is still regarded as one of the greatest shows ever made?", answer: "The Sopranos" },
+        { question: "Who served as Prime Minister of the UK for the majority of the '90s?", answer: "John Major" },
+        { question: "Who is the founder of the late-'90s largest independent mortgage lender and also the owner of the Cleveland Cavaliers?", answer: "Dan Gilbert" },
+        { question: "What was the final Harry Potter book released in the '90s?", answer: "Harry Potter and the Prisoner of Azkaban" },
+        { question: "What handheld video game device released by Nintendo between 1989 and 1990 popularized the concept of playing video games on the go?", answer: "Game Boy" },
+        { question: "Which superstar was referred to as the 'Queen of Pop' throughout the '80s and '90s?", answer: "Madonna" },
+        { question: "Which '90s heartthrob teamed up with Matthew Lillard to become the first two Ghostface killers of the Scream franchise?", answer: "Skeet Ulrich" },
+        { question: "Which famous actor portrayed Batman in the 1992 film Batman Returns?", answer: "Michael Keaton" },
+        { question: "What was the name of the first cloned mammal ever to be created by a human cell in 1996?", answer: "Dolly the sheep" },
+        { question: "What does the abbreviation 'AOL' stand for?", answer: "America Online" },
+        { question: "Who voices Buzz Lightyear and Woody in the 1995 film Toy Story?", answer: "Tim Allen and Tom Hanks" },
+        { question: "Finish the sentence from the 1994 movie Forrest Gump: 'Life is like a box of chocolates...'", answer: "'You never know what you're going to get.'" },
+        { question: "How many championships did the Chicago Bulls win in the 1990s?", answer: "Six — 1991, 1992, 1993, 1996, 1997, and 1998" },
+        { question: "What is the butler’s name in the popular 1990s show The Fresh Prince of Bel-Air?", answer: "Geoffrey" },
+        { question: "What show, featuring a group of friends investigating paranormal activity, became a cult hit in the 90s?", answer: "The X-Files" },
+        { question: "What was the name of the beloved teacher on Boy Meets World?", answer: "George Feeny" },
+        { question: "Which Saturday Night Live star got his start on the '90s sketch comedy show All That?", answer: "Kenan Thompson" },
+        { question: "Who was involved in the 1998 incident from The Real World which was labeled 'The Slap Heard Around The World?'", answer: "Stephen and Irene" },
+        { question: "Who became the first woman in 1997 to be appointed as the secretary of state in the United States?", answer: "Madeleine Albright" },
+        { question: "The 1996 Summer Olympics were held in which US city?", answer: "Atlanta" },
+        { question: "How many years was Nelson Mandela President of South Africa in the 1990s?", answer: "Five" },
+        { question: "What communication device were an unbelievable 61 million people using in 1994, that is now obsolete?", answer: "Pagers/beepers" },
+        { question: "In 1992, the largest mall in the US opened in what state?", answer: "Minnesota" },
+        { question: "What do the initials in 'JNCO' jeans stand for?", answer: "'Judge None Choose One'" },
+        { question: "What was the name of Stephanie Tanner's bear in Full House?", answer: "Mr. Bear" },
+        { question: "When you dialed 69 on a landline, what did it do?", answer: "It allowed you to call back the last number that rang your line." },
+        { question: "What year did Major League Soccer kick off in the US?", answer: "1996" },
+        { question: "What video game was the first ever to be played in space?", answer: "Tetris" },
+        { question: "What warning label was adopted in the early 1990s and put on 'explicit' albums?", answer: "Parental Advisory stickers" }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
